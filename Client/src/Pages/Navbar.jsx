@@ -1,5 +1,5 @@
 import React from 'react'
-import logoimg from '../../public/visito_management_logo.png'
+import logoimg from '../assets/visito_management_logo.png'
 
 const Navbar = () => {
     return (
