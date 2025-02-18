@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [admin, setAdmin] = useState({ email: "", password: "" });
-
+  const [error, setError] = useState(""); // Error message state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,12 +18,16 @@ const AdminLogin = () => {
         email: admin.email,
         password: admin.password,
       });
+
       const token = res.data.token;
-      localStorage.setItem("admin-token", token);
-      console.log("Login Success:", res.data);
-      navigate('/Adminhome')
+      if (token) {
+        localStorage.setItem("admin-token", token);
+        console.log("Login Success:", res.data);
+        navigate("/Adminhome");
+      }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Login failed:", error.response?.data?.message || "Error");
+      setError(error.response?.data?.message || "Invalid email or password");
     }
   };
 
@@ -33,6 +37,11 @@ const AdminLogin = () => {
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Admin Login
         </h2>
+
+        {error && (
+          <p className="text-red-600 text-center font-medium mb-4">{error}</p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-gray-700 font-medium">Email</label>
@@ -60,7 +69,7 @@ const AdminLogin = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300"
+            className="w-full bg-blue-600 cursor-pointer text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300"
           >
             Login
           </button>
