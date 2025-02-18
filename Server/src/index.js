@@ -1,6 +1,7 @@
 import express from 'express';
 import ConnectedDb from './DbConnection/Database.js';
 import VisitorRoutes from './Routes/VisitorData.Route.js';
+import AdminuserRoutes from './Routes/AdminUser.Route.js';
 import cors from 'cors'
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 ConnectedDb()
 
 app.use('/api', VisitorRoutes)
+app.use('/api', AdminuserRoutes)
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);

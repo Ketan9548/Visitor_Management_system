@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminRegistration = () => {
     const [admin, setAdmin] = useState({
@@ -8,18 +10,26 @@ const AdminRegistration = () => {
         confirmPassword: "",
     });
 
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         setAdmin({ ...admin, [e.target.name]: e.target.value });
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (admin.password !== admin.confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
-        console.log("Admin Registration Data:", admin);
+        try {
+            await axios.post('/api/registration', { username: admin.username, email: admin.email, password: admin.password })
+                .then((response) => { console.log(response) })
+                .catch((error) => { console.log(("error in registration admin", error)) })
+            navigate('')
+        } catch (error) {
+            console.error("Error in admin registration", error);
+        }
     };
-
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
