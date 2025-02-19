@@ -3,9 +3,10 @@ import ConnectedDb from './DbConnection/Database.js';
 import VisitorRoutes from './Routes/VisitorData.Route.js';
 import AdminuserRoutes from './Routes/AdminUser.Route.js';
 import cors from 'cors'
+import 'dotenv/config'
 
 const app = express();
-const port = 4000
+const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(express.json())
@@ -19,6 +20,6 @@ ConnectedDb()
 app.use('/api', VisitorRoutes)
 app.use('/api', AdminuserRoutes)
 
-app.listen(port, () => {
-    console.log(`Server is running on port http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port http://localhost:${PORT}`);
 });
