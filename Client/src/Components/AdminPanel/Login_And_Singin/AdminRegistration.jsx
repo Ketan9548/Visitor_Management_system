@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const AdminRegistration = () => {
     const [admin, setAdmin] = useState({
@@ -93,6 +94,12 @@ const AdminRegistration = () => {
                     >
                         Register
                     </button>
+                    <div className="flex flex-col justify-center sm:flex-row items-center sm:items-start text-center sm:text-left">
+                        <NavLink to="/loginadmin">
+                            <span className="font-bold mr-1 underline text-blue-600 hover:text-blue-800">Click here</span>
+                        </NavLink>
+                        <span>to Login Account.</span>
+                    </div>
                 </form>
             </div>
         </div>

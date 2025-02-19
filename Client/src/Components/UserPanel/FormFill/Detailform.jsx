@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import QRCode from 'react-qr-code';
+import html2canvas from 'html2canvas';
 
 const Detailform = () => {
     const formdata = {
@@ -12,6 +16,8 @@ const Detailform = () => {
     };
 
     const [userdata, setuserdata] = useState(formdata);
+    const [size] = useState(128);
+    const qrRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +34,7 @@ const Detailform = () => {
             fullname: userdata.fullname,
             email: userdata.email,
             mobile: userdata.mobile,
-            date: new Date(userdata.date).toISOString(),
+            date: userdata.date,
             time: userdata.time,
             purposeofvisit: userdata.purposeofvisit
         })
@@ -39,6 +45,17 @@ const Detailform = () => {
             .catch((err) => {
                 console.log("Error during visitor data submission:", err);
             });
+    };
+
+    const downloadQR = () => {
+        if (qrRef.current) {
+            html2canvas(qrRef.current).then((canvas) => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'visitor_qr_code.png';
+                link.click();
+            });
+        }
     };
 
     return (
@@ -123,6 +140,28 @@ const Detailform = () => {
                     </div>
                 </form>
             </div>
+            <div>
+                <Popup trigger={<button className='bg-green-500 p-2 border-2 border-white rounded-2xl cursor-pointer'>Download QR</button>}
+                    position="right center">
+                    <div ref={qrRef} className="p-4 bg-white">
+                        {
+                            userdata && (
+                                <QRCode
+                                    title="Visitor QR Code"
+                                    value={JSON.stringify(userdata)}
+                                    bgColor="white"
+                                    fgColor="black"
+                                    size={size}
+                                />
+                            )
+                        }
+                    </div>
+                    <button onClick={downloadQR} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md">
+                        Download
+                    </button>
+                </Popup>
+            </div>
+
         </div>
     );
 };

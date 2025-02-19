@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [admin, setAdmin] = useState({ email: "", password: "" });
@@ -73,6 +73,12 @@ const AdminLogin = () => {
           >
             Login
           </button>
+          <div className="flex flex-col justify-center sm:flex-row items-center sm:items-start text-center sm:text-left">
+            <NavLink to="/registrationadmin">
+              <span className="font-bold mr-1 underline text-blue-600 hover:text-blue-800">Click here</span>
+            </NavLink>
+            <span>to create a new account.</span>
+          </div>
         </form>
       </div>
     </div>
