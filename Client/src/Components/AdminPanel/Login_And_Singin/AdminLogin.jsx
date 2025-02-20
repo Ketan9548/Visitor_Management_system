@@ -23,7 +23,7 @@ const AdminLogin = () => {
       if (token) {
         localStorage.setItem("admin-token", token);
         console.log("Login Success:", res.data);
-        navigate("/Adminhome");
+        navigate("/adminhome/adminhomeright");
       }
     } catch (error) {
       console.error("Login failed:", error.response?.data?.message || "Error");

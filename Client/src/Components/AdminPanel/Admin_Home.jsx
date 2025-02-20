@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { Menu, X } from "lucide-react"; // Icons for menu toggle
+import Fotter from "../../Pages/Footer.jsx";
 
 const Admin_Home = () => {
   const [isToggled, setIsToggled] = useState(true);
 
   return (
     <>
-      <div className="flex w-full h-screen">
-        {/* Sidebar */}
+      <div className="flex w-auto h-screen">
         <div
-          className={`fixed md:relative  text-black w-64 h-screen p-5 transition-transform duration-300 ${isToggled ? "translate-x-0" : "-translate-x-64 md:translate-x-0"
-            }`}
+          className={`bg-black absolutre text-white h-screen p-5 transition-all duration-300
+            ${isToggled ? "w-64" : "hidden overflow-hidden md:w-64"}`}
         >
           <button
             className="md:hidden text-white mb-4 ml-3"
@@ -21,7 +21,7 @@ const Admin_Home = () => {
           </button>
           <ul className="flex flex-col space-y-6">
             <li>
-              <NavLink to="#" className="hover:text-gray-300">
+              <NavLink to="adminhomeright" className="hover:text-gray-300">
                 Home
               </NavLink>
             </li>
@@ -43,16 +43,19 @@ const Admin_Home = () => {
           </ul>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-5">
-          {/* Toggle Button */}
+        <div
+          className={`flex-1 p-5 transition-all duration-300 
+            ${isToggled ? "ml-64 md:ml-0" : "ml-0"}`}
+        >
           <button
             className="md:hidden text-black mb-4"
             onClick={() => setIsToggled(true)}
           >
             <Menu size={28} />
           </button>
-          <p>This is the main content</p>
+          <div>
+            <Outlet />
+          </div>
         </div>
       </div>
     </>
