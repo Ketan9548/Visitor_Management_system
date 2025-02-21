@@ -15,7 +15,7 @@ const Detailform = () => {
         purposeofvisit: ""
     };
 
-    const [userdata, setuserdata] = useState(formdata);
+    const [userdata, setuserdata] = useState('');
     const [size] = useState(128);
     const qrRef = useRef(null);
 
@@ -148,7 +148,7 @@ const Detailform = () => {
                             userdata && (
                                 <QRCode
                                     title="Visitor QR Code"
-                                    value={JSON.stringify(userdata)}
+                                    value={userdata ? JSON.stringify(userdata) : ''}
                                     bgColor="white"
                                     fgColor="black"
                                     size={size}
