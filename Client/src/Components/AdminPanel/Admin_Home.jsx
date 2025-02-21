@@ -1,59 +1,44 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Menu, X } from "lucide-react"; // Icons for menu toggle
-import Fotter from "../../Pages/Footer.jsx";
 
 const Admin_Home = () => {
-  const [isToggled, setIsToggled] = useState(true);
+  const [isToggled, setIsToggled] = useState(false);
 
   return (
     <>
-      <div className="flex w-auto h-screen">
+      <div className="flex h-screen w-full">
+        {/* Sidebar */}
         <div
-          className={`bg-black absolutre text-white h-screen p-5 transition-all duration-300
-            ${isToggled ? "w-64" : "hidden overflow-hidden md:w-64"}`}
+          className={`absolute md:relative bg-neutral-500 p-6 w-56 h-full md:block transition-all ${isToggled ? "left-0" : "-left-64"
+            } md:left-0`}
         >
           <button
-            className="md:hidden text-white mb-4 ml-3"
+            className="absolute top-4 right-4 text-white md:hidden"
             onClick={() => setIsToggled(false)}
           >
-            <X size={27} />
+            <X size={24} />
           </button>
-          <ul className="flex flex-col space-y-6">
-            <li>
-              <NavLink to="adminhomeright" className="hover:text-gray-300">
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="#" className="hover:text-gray-300">
-                About
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="#" className="hover:text-gray-300">
-                Services
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="#" className="hover:text-gray-300">
-                Contact
-              </NavLink>
-            </li>
-          </ul>
+          <p className="mt-3 text-white">
+            <NavLink to="#">Home</NavLink>
+          </p>
+          <p className="mt-3 text-white">
+            <NavLink to="#">Completed</NavLink>
+          </p>
+          <p className="mt-3 text-white">
+            <NavLink to="#">About</NavLink>
+          </p>
         </div>
 
-        <div
-          className={`flex-1 p-5 transition-all duration-300 
-            ${isToggled ? "ml-64 md:ml-0" : "ml-0"}`}
-        >
+        {/* Right Panel */}
+        <div className="flex-1 p-3.5">
           <button
-            className="md:hidden text-black mb-4"
+            className="md:hidden p-2 text-gray-600"
             onClick={() => setIsToggled(true)}
           >
-            <Menu size={28} />
+            <Menu size={24} />
           </button>
-          <div>
+          <div className="">
             <Outlet />
           </div>
         </div>
