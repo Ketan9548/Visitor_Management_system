@@ -45,6 +45,7 @@ const Detailform = () => {
             .catch((err) => {
                 console.log("Error during visitor data submission:", err);
             });
+        setuserdata('')
     };
 
     const downloadQR = () => {

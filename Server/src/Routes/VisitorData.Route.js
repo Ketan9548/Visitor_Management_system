@@ -26,4 +26,31 @@ VisitorRoutes.get('/get-visitors', async (req, res) => {
     }
 })
 
+VisitorRoutes.put('/check-in/:id', async (req, res) => {
+    let { id } = req.params;
+    let { completed } = req.body;
+    try {
+        const updatedVisitor = await VisitorModel.findByIdAndUpdate(id, { completed: true }, { new: true });
+        if (!updatedVisitor) {
+            return res.status(404).json({ message: "Visitor not found" });
+        }
+        res.status(200).json({ message: 'Visitor checked in successfully' });
+    } catch (error) {
+        res.status(400).json({ message: "Error in checking in the visitor: ", error: error.message });
+    }
+})
+
+VisitorRoutes.delete('/delete/:id', async (req, res) => {
+    let { id } = req.params;
+    try {
+        const deletedVisitor = await VisitorModel.findByIdAndDelete(id);
+        if (!deletedVisitor) {
+            return res.status(404).json({ message: "Visitor not found" });
+        }
+        res.status(200).json({ message: 'Visitor deleted successfully' });
+    } catch (error) {
+        res.status(400).json({ message: "Error in deleting the visitor: ", error: error.message });
+    }
+})
+
 export default VisitorRoutes;

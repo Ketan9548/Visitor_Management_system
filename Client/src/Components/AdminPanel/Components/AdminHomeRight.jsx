@@ -1,6 +1,55 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const AdminHomeRight = () => {
+    const [visitordata, setvisitordata] = useState([]);
+
+
+    const getVisitorData = async () => {
+        try {
+            const response = await axios.get('/api/get-visitors')
+                .then((res) => setvisitordata(res.data))
+                .catch((err) => console.log("error during api routes get visitor data : ", err))
+
+        } catch (error) {
+            console.log("error during to fetch the data in the backend: ", error)
+        }
+    }
+
+    async function handlecheck(id) {
+        try {
+            if (id) {
+                const confirmMation = window.alert('are you sure you want to checked In this Visitor')
+                if (!confirmMation) return;
+
+                await handlecheck(id)
+                await axios.put(`/api/check-in/${id}`)
+                    .then((res) => console.log("check is marked successfully", res))
+                    .catch((err) => console.log("error during to check completed field"))
+            }
+
+        } catch (error) {
+            console.log("Error in handlecheck:", error);
+        }
+
+    }
+
+    async function handledelete(id) {
+        try {
+            await axios.delete(`/api/delete/${id}`);
+            console.log("Deleted successfully");
+            getVisitorData();
+        } catch (err) {
+            console.log("Error during deletion:", err);
+        }
+    }
+
+    useEffect(() => {
+        getVisitorData();
+        console.log("the data of visitor is:", visitordata)
+    }, [])
+
+
     return (
         <>
             <div className='flex flex-col md:flex-row justify-between'>
@@ -45,7 +94,7 @@ const AdminHomeRight = () => {
                 <table className="w-full border-collapse border border-gray-300 shadow-lg min-w-max">
                     <thead className="bg-gray-200 text-gray-700">
                         <tr>
-                            {["ID", "Name", "Email", "Phone", "Gender", "Date"].map((head) => (
+                            {["S.No.", "Name", "Email", "Phone", "Date", "Time", "Purpose", "Completed", "Delete"].map((head) => (
                                 <th
                                     key={head}
                                     className="border border-gray-300 px-2 py-2 text-left text-xs md:text-sm lg:text-base whitespace-nowrap"
@@ -55,23 +104,44 @@ const AdminHomeRight = () => {
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {[1, 2, 3, 4].map((id) => (
-                            <tr key={id} className="odd:bg-white even:bg-gray-100 text-xs md:text-sm lg:text-base">
-                                <td className="border border-gray-300 px-2 py-2">#{id}</td>
-                                <td className="border border-gray-300 px-2 py-2">John Doe</td>
-                                <td className="border border-gray-300 px-2 py-2 whitespace-nowrap">
-                                    john@example.com
-                                </td>
-                                <td className="border border-gray-300 px-2 py-2">123-456-7890</td>
-                                <td className="border border-gray-300 px-2 py-2">Male</td>
-                                <td className="border border-gray-300 px-2 py-2">2025-02-21</td>
+                    {visitordata.length > 0 ? (
+                        <tbody>
+                            {visitordata.map((value, index) => (
+                                <tr key={value._id} className="odd:bg-white even:bg-gray-100 text-xs md:text-sm lg:text-base">
+                                    <td className="border border-gray-300 px-2 py-2">{index + 1}</td>
+                                    <td className="border border-gray-300 px-2 py-2">{value.fullname}</td>
+                                    <td className="border border-gray-300 px-2 py-2 whitespace-nowrap">
+                                        {value.email}
+                                    </td>
+                                    <td className="border border-gray-300 px-2 py-2">{value.mobile}</td>
+                                    <td className="border border-gray-300 px-2 py-2">
+                                        {value.date ? new Date(value.date).toLocaleString() : "N/A"}
+                                    </td>
+                                    <td className="border border-gray-300 px-2 py-2">{value.time}</td>
+                                    <td className="border border-gray-300 px-2 py-2">{value.purposeofvisit}</td>
+                                    <td className="border border-gray-300 px-2 py-2">
+                                        <input onClick={() => handlecheck(value._id)} type="checkbox" defaultChecked={value.completed} />
+                                    </td>
+                                    <td className="border border-gray-300 px-2 py-2">
+                                        <button
+                                            className="cursor-pointer bg-red-600 text-white px-3 py-1 rounded-md shadow-md hover:bg-red-700 transition-all duration-200"
+                                            onClick={() => handledelete(value._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    ) : (
+                        <tbody>
+                            <tr>
+                                <td colSpan="9" className="text-center py-4 text-gray-500">No Data Available</td>
                             </tr>
-                        ))}
-                    </tbody>
+                        </tbody>
+                    )}
                 </table>
             </div>
-
         </>
     )
 }
