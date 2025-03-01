@@ -15,7 +15,7 @@ const Detailform = () => {
         purposeofvisit: ""
     };
 
-    const [userdata, setuserdata] = useState('');
+    const [userdata, setuserdata] = useState(formdata);
     const [size] = useState(128);
     const qrRef = useRef(null);
 
